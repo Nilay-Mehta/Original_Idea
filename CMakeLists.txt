@@ -1,4 +1,5 @@
-set(PROJECT_NAME new_sfml_project)
+set(PROJECT_NAME Original_Idea)
+
 cmake_minimum_required(VERSION 3.31.7)
 project(${PROJECT_NAME})
 
