@@ -1,66 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
+#include "player.h"
 
 constexpr uint16_t SCREEN_WIDTH = 800;
 constexpr uint16_t SCREEN_HEIGHT = 600;
-
-// Defining the player class
-class Player {
-    // Get a circle shape for the player (should be changed later)
-    sf::CircleShape shape;
-    sf::Vector2f velocity;
-
-public:
-    // Constructor that takes the shape, position, velocity
-    Player(sf::CircleShape  _shape, const sf::Vector2f position, const sf::Vector2f& _velocity) :
-    shape(std::move(_shape)), velocity(_velocity) { shape.setPosition(position.x, position.y); }
-
-    // Set position using a vector
-    void setPosition(const sf::Vector2f& _position) {
-        shape.setPosition(_position.x, _position.y);
-    }
-
-    // Set position using x and y coordinates
-    void setPosition(const float& _x, const float& _y) {
-        shape.setPosition(_x, _y);
-    }
-
-    // Get position as a vector
-    sf::Vector2f getPosition() const {
-        return shape.getPosition();
-    }
-
-    // Set velocity using a vector
-    void setVelocity(const sf::Vector2f& _velocity) {
-        velocity = _velocity;
-    }
-
-    // Set velocity using x and y coordinates
-    void setVelocity(const float& _x, const float& _y) {
-        velocity.x = _x;
-        velocity.y = _y;
-    }
-
-    // Get velocity as a vector
-    sf::Vector2f getVelocity() const {
-        return velocity;
-    }
-
-    // Set the color of the player
-    void setFillColor(const sf::Color& _color) {
-        shape.setFillColor(_color);
-    }
-
-    // Get shape (read only)
-    const sf::CircleShape& getShape() const {
-        return shape;
-    }
-
-    // Update the position of the player
-    void update() {
-        shape.setPosition(shape.getPosition() + velocity);
-    }
-};
 
 int main() {
     // Create a window
