@@ -4,10 +4,15 @@
 #include "game.h"
 #include "player.h"
 Game::Game()
-    :window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML TEST"){
-}
+    :window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML TEST"),
+    player(
+        sf::CircleShape(Player::radius),
+        Player::middleOfTheScreen(),
+        sf::Vector2f(0.0f, 0.0f)
+    )
+{}
 
-void Game::game_loop(Player& player) {
+void Game::game_loop() {
     // Run the program as long as the window is open
     while (window.isOpen()) {
         // Process events

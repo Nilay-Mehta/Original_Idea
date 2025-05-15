@@ -1,8 +1,13 @@
 #include "Player.h"
 
+
 Player::Player(sf::CircleShape _shape, const sf::Vector2f position, const sf::Vector2f& _velocity)
     : shape(std::move(_shape)), velocity(_velocity) {
     shape.setPosition(position.x, position.y);
+}
+
+inline sf::Vector2f Player::middleOfTheScreen() {
+    return sf::Vector2f(SCREEN_WIDTH / 2.0f - radius, SCREEN_HEIGHT / 2.0f - radius);
 }
 
 void Player::setPosition(const sf::Vector2f& _position) {

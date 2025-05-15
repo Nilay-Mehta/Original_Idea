@@ -15,7 +15,10 @@ set(SFML_DIR "./SFML-2.6.2/lib/cmake/SFML")
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 
 # Add executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp
+        config.h
+        game.cpp
+)
 
 # Link SFML libraries (SFML 2.x uses the old target names without sfml::)
 target_link_libraries(${PROJECT_NAME}

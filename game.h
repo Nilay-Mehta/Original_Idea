@@ -6,18 +6,18 @@
 #include <SFML/Graphics.hpp>
 #include "player.h"
 #include <SFML/System.hpp>
+#include "config.h"
 
 class Game {
 public:
-    static constexpr uint16_t SCREEN_WIDTH = 1200;
-    static constexpr uint16_t SCREEN_HEIGHT = 800;
 
     Game();
     void ini_window();
-    void game_loop(Player& player);
+    void game_loop();
     void update();
     void draw();
 
 private:
     sf::RenderWindow window;
+    Player player;
 };
