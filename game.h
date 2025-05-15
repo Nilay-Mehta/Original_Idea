@@ -12,12 +12,13 @@ class Game {
 public:
 
     Game();
-    void ini_window();
     void game_loop();
-    void update();
-    void draw();
 
 private:
+    void handleInput(float deltaTime);
+    void update(float deltaTime);
+    void render();
+
     sf::RenderWindow window;
     Player player;
 };
