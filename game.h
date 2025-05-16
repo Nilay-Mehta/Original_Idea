@@ -4,8 +4,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 #include "player.h"
+#include "inv.h"
+#include "npc.h"
 
 class Game {
 public:
@@ -19,4 +22,8 @@ private:
 
     sf::RenderWindow window;
     Player player;
+    bool playerAlive = true;
+    NPC npc;
+    std::vector<Projectile> projectiles;
+    sf::Clock shootClock;
 };

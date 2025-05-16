@@ -19,6 +19,10 @@ add_executable(${PROJECT_NAME}
         main.cpp
         game.cpp
         player.cpp
+        inv.h
+        inv.cpp
+        npc.h
+        npc.cpp
 )
 
 # Link SFML libraries (SFML 2.x uses the old target names without sfml::)

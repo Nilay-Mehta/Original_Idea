@@ -10,7 +10,8 @@
 
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
-    player(sf::Color::Blue)
+    player(sf::Color::Blue),
+    npc({0.f, 0.f})
 {}
 
 void Game::handleInput(const float deltaTime) { //user inputs for movement
@@ -27,16 +28,80 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
 
         player.move(direction * Config::Player::PLAYER_SPEED * deltaTime);
     }
+
+    // std::cout << "Checking mouse input...\n";
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && shootClock.getElapsedTime().asMilliseconds() > 150) {
+
+        // std::cout << "Projectile fired!\n";
+
+        sf::Vector2f playerPos = player.getPosition();
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2f worldMousePos = window.mapPixelToCoords(mousePos);
+        sf::Vector2f direction = worldMousePos - playerPos;
+
+        // Alternate between Circle and Capsule projectiles
+        static bool toggle = false;
+        ProjectileType type = toggle ? ProjectileType::CapBullet : ProjectileType::CirBullet;
+        toggle = !toggle;
+
+        projectiles.emplace_back(playerPos, direction, type);
+        shootClock.restart();
+    }
+
 }
 
 void Game::update(float deltaTime) {
-    //empty for now but maksood bhai yahi p updates denge
+    if (!playerAlive) return;
+
     player.borderCollision(window);
+
+    // Always update all projectiles movement
+    for (auto& p : projectiles) {
+        p.update(deltaTime);
+    }
+
+    npc.update(deltaTime, player.getPosition(), Config::Player::PLAYER_SPEED * 0.6f);
+
+    // Then handle collisions & erasing projectiles
+    for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+        bool erased = false;
+
+        if (npc.isAlive() && npc.getBounds().intersects(
+                (it->getType() == ProjectileType::CirBullet) ?
+                    it->getCircleShape().getGlobalBounds() :
+                    it->getCapsuleBounds())) {
+            npc.kill();
+            it = projectiles.erase(it);
+            erased = true;
+                    }
+
+        if (!erased && it->isOffScreen(window)) {
+            it = projectiles.erase(it);
+            erased = true;
+        }
+
+        if (!erased)
+            ++it;
+    }
+
+    // Check collision between NPC and player
+    if (npc.isAlive() && playerAlive &&
+        npc.getBounds().intersects(player.getShape().getGlobalBounds())) {
+        playerAlive = false;
+        projectiles.clear();
+        }
 }
+
 
 void Game::render() {//to render
     window.clear(sf::Color::Black);
-    window.draw(player.getShape());
+
+    if (playerAlive)
+        window.draw(player.getShape());
+    for (const auto& projectile : projectiles) {
+        projectile.draw(window);
+    }
+    npc.draw(window);
     window.display();
 }
 
