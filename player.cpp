@@ -49,7 +49,7 @@ void Player::borderCollision(const sf::RenderWindow &window) {
     float RADIUS = radius;
 
     pos.x = std::clamp(pos.x, RADIUS, static_cast<float>(window.getSize().x) - RADIUS);
-    pos.x = std::clamp(pos.y, RADIUS, static_cast<float>(window.getSize().y) - RADIUS);
+    pos.y = std::clamp(pos.y, RADIUS, static_cast<float>(window.getSize().y) - RADIUS);
 
     shape.setPosition(pos);
 }

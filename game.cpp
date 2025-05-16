@@ -25,7 +25,7 @@ void Game::handleInput(float deltaTime) {//user inputs for movement
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length;
 
-        const float speed = 150.0f;
+        const float speed = 250.0f;
         player.move(direction * speed * deltaTime);
     }
 }
