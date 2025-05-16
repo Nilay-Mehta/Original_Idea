@@ -4,13 +4,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+
 #include "player.h"
-#include <SFML/System.hpp>
-#include "config.h"
 
 class Game {
 public:
-
     Game();
     void game_loop();
 

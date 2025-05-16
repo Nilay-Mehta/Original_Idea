@@ -1,19 +1,19 @@
 //
 // Created by nilay on 15-05-2025.
 //
-#include <stdio.h>
-#include "game.h"
-
 #include <cmath>
 #include <iostream>
 
+#include "game.h"
 #include "player.h"
+#include "config.h"
+
 Game::Game()
     :window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
     player(sf::Color::Blue)
 {}
 
-void Game::handleInput(float deltaTime) {//user inputs for movement
+void Game::handleInput(const float deltaTime) { //user inputs for movement
     sf::Vector2f direction(0.0f, 0.0f);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.0f;
@@ -25,8 +25,7 @@ void Game::handleInput(float deltaTime) {//user inputs for movement
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length;
 
-        const float speed = 250.0f;
-        player.move(direction * speed * deltaTime);
+        player.move(direction * PLAYER_SPEED * deltaTime);
     }
 }
 
@@ -42,8 +41,17 @@ void Game::render() {//to render
 }
 
 void Game::game_loop() {
+    // Avoid using both at the same time. Vsync recommended.
+    if (VSYNC_ENABLED) {
+        window.setVerticalSyncEnabled(true);
+    }
+    if (FRAMERATE_LIMIT_ENABLED) {
+        window.setFramerateLimit(MAX_FPS);
+    }
 
     sf::Clock clock;
+    sf::Time lastTime = clock.getElapsedTime();
+
     // Run the program as long as the window is open
     while (window.isOpen()) {
         // Process events
@@ -53,7 +61,14 @@ void Game::game_loop() {
                 window.close();
         }
 
-        float deltaTime = clock.restart().asSeconds();
+        // Calculate delta time as (time of current frame - time of prev frame)
+        const sf::Time currentTime = clock.getElapsedTime();
+        float deltaTime = (currentTime - lastTime).asSeconds();
+        lastTime = currentTime;
+
+        // Prevent delta time from getting too big
+        if (deltaTime > MAX_DELTA_TIME)
+            deltaTime = MAX_DELTA_TIME;
 
         handleInput(deltaTime);
         update(deltaTime);

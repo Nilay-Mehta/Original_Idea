@@ -3,14 +3,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "config.h"
 
 // Defining the player class
 class Player {
 public:
-    static constexpr int radius = 50;
-
-    Player(const sf::Color& color);
+    explicit Player(const sf::Color& color);
     static sf::Vector2f middleOfTheScreen();
     void setFillColor(const sf::Color& _color);
     const sf::CircleShape& getShape() const;
