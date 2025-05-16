@@ -9,7 +9,7 @@
 #include "config.h"
 
 Game::Game()
-    :window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
+    :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
     player(sf::Color::Blue)
 {}
 
@@ -22,10 +22,10 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) direction.y += 1.0f;
 
     if (direction.x != 0.0f || direction.y != 0.0f) {
-        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length;
 
-        player.move(direction * PLAYER_SPEED * deltaTime);
+        player.move(direction * Config::Player::PLAYER_SPEED * deltaTime);
     }
 }
 
@@ -42,11 +42,11 @@ void Game::render() {//to render
 
 void Game::game_loop() {
     // Avoid using both at the same time. Vsync recommended.
-    if (VSYNC_ENABLED) {
+    if (Config::Display::VSYNC_ENABLED) {
         window.setVerticalSyncEnabled(true);
     }
-    if (FRAMERATE_LIMIT_ENABLED) {
-        window.setFramerateLimit(MAX_FPS);
+    if (Config::Display::FRAMERATE_LIMIT_ENABLED) {
+        window.setFramerateLimit(Config::Display::MAX_FPS);
     }
 
     sf::Clock clock;
@@ -67,8 +67,8 @@ void Game::game_loop() {
         lastTime = currentTime;
 
         // Prevent delta time from getting too big
-        if (deltaTime > MAX_DELTA_TIME)
-            deltaTime = MAX_DELTA_TIME;
+        if (deltaTime > Config::Timing::MAX_DELTA_TIME)
+            deltaTime = Config::Timing::MAX_DELTA_TIME;
 
         handleInput(deltaTime);
         update(deltaTime);

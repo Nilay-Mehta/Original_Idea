@@ -5,15 +5,15 @@
 Player::Player(const sf::Color& color)
     : velocity(0.0f, 0.0f)
 {
-    shape.setRadius(RADIUS);
-    shape.setOrigin(RADIUS, RADIUS);
+    shape.setRadius(Config::Player::RADIUS);
+    shape.setOrigin(Config::Player::RADIUS, Config::Player::RADIUS);
     shape.setFillColor(color);
     shape.setPosition(middleOfTheScreen());
 }
 
 
 sf::Vector2f Player::middleOfTheScreen() {
-    return {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+    return {Config::Display::SCREEN_WIDTH / 2.0f, Config::Display::SCREEN_HEIGHT / 2.0f};
 }
 
 void Player::setFillColor(const sf::Color& _color) {
@@ -43,8 +43,16 @@ sf::Vector2f Player::getPosition() const {
 void Player::borderCollision(const sf::RenderWindow &window) {
     sf::Vector2f pos = shape.getPosition();
 
-    pos.x = std::clamp(pos.x, RADIUS, static_cast<float>(window.getSize().x) - RADIUS);
-    pos.y = std::clamp(pos.y, RADIUS, static_cast<float>(window.getSize().y) - RADIUS);
+    pos.x = std::clamp(
+        pos.x,
+        Config::Player::RADIUS,
+        static_cast<float>(window.getSize().x) - Config::Player::RADIUS
+    );
+    pos.y = std::clamp(
+        pos.y,
+        Config::Player::RADIUS,
+        static_cast<float>(window.getSize().y) - Config::Player::RADIUS
+    );
 
     shape.setPosition(pos);
 }
