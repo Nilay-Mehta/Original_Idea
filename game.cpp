@@ -15,6 +15,7 @@ Game::Game()
 
 void Game::handleInput(float deltaTime) {//user inputs for movement
     sf::Vector2f direction(0.0f, 0.0f);
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.0f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) direction.x += 1.0f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) direction.y -= 1.0f;
@@ -24,13 +25,14 @@ void Game::handleInput(float deltaTime) {//user inputs for movement
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         direction /= length;
 
-        const float speed = 111.0f;
+        const float speed = 150.0f;
         player.move(direction * speed * deltaTime);
     }
 }
 
 void Game::update(float deltaTime) {
     //empty for now but maksood bhai yahi p updates denge
+    player.borderCollision(window);
 }
 
 void Game::render() {//to render
@@ -52,20 +54,6 @@ void Game::game_loop() {
         }
 
         float deltaTime = clock.restart().asSeconds();
-        //
-        // sf::Vector2f direction(0.0f, 0.0f);
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.0f;
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) direction.x += 1.0f;
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) direction.y -= 1.0f;
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) direction.y += 1.0f;
-        //
-        // if (direction.x != 0.0f || direction.y != 0.0f) {
-        //     float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-        //     direction /= length;
-        //
-        //     const float speed = 111.0f;
-        //     player.move(direction * speed * deltaTime);
-        // }
 
         handleInput(deltaTime);
         update(deltaTime);
