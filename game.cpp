@@ -3,6 +3,7 @@
 //
 #include <cmath>
 #include <iostream>
+#include <filesystem>
 
 #include "game.h"
 #include "player.h"
@@ -52,9 +53,24 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
         shootClock.restart();
     }
 
+    std::filesystem::path exeDir = std::filesystem::current_path();  // gets working directory
+    std::filesystem::path fontPath = exeDir / "OpenSans-Regular.ttf";
+
+    if (!font.loadFromFile(fontPath.string())) {
+        std::cerr << "Failed to load font from: " << fontPath << std::endl;
+    }
+
+    fpsText.setFont(font);
+    fpsText.setCharacterSize(18);
+    fpsText.setFillColor(sf::Color::Green);
+    fpsText.setPosition(10.f, 5.f);
+    fpsText.setString("FPS: ");
 }
 
 void Game::update(float deltaTime) {
+    float fps = 1.f / deltaTime;
+    fpsText.setString("FPS: " + std::to_string(static_cast<int>(fps)));
+
     if (!playerAlive) return;
 
     player.borderCollision(window);
@@ -97,6 +113,7 @@ void Game::render() {//to render
         projectile->draw(window);
     }
     npc.draw(window);
+    window.draw(fpsText);
     window.display();
 }
 

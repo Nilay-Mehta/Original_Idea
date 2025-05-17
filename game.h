@@ -27,4 +27,6 @@ private:
     NPC npc;
     std::vector<std::unique_ptr<BaseProjectile>> projectiles;
     sf::Clock shootClock;
+    sf::Font font;
+    sf::Text fpsText;
 };
