@@ -5,10 +5,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 
 #include "player.h"
-#include "inv.h"
 #include "npc.h"
+#include "base_projectile.h"
 
 class Game {
 public:
@@ -24,6 +25,6 @@ private:
     Player player;
     bool playerAlive = true;
     NPC npc;
-    std::vector<Projectile> projectiles;
+    std::vector<std::unique_ptr<BaseProjectile>> projectiles;
     sf::Clock shootClock;
 };

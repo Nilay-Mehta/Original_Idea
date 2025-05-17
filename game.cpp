@@ -7,6 +7,8 @@
 #include "game.h"
 #include "player.h"
 #include "config.h"
+#include "first_projectile.h"
+#include "second_projectile.h"
 
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
@@ -41,10 +43,12 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
 
         // Alternate between Circle and Capsule projectiles
         static bool toggle = false;
-        ProjectileType type = toggle ? ProjectileType::CapBullet : ProjectileType::CirBullet;
-        toggle = !toggle;
+        if (toggle)
+            projectiles.emplace_back(std::make_unique<CirBullet>(playerPos, direction));
+        else
+            projectiles.emplace_back(std::make_unique<CapBullet>(playerPos, direction));
 
-        projectiles.emplace_back(playerPos, direction, type);
+        toggle = !toggle;
         shootClock.restart();
     }
 
@@ -57,31 +61,22 @@ void Game::update(float deltaTime) {
 
     // Always update all projectiles movement
     for (auto& p : projectiles) {
-        p.update(deltaTime);
+        p->update(deltaTime);
     }
 
     npc.update(deltaTime, player.getPosition(), Config::Player::PLAYER_SPEED * 0.6f);
 
     // Then handle collisions & erasing projectiles
     for (auto it = projectiles.begin(); it != projectiles.end(); ) {
-        bool erased = false;
 
-        if (npc.isAlive() && npc.getBounds().intersects(
-                (it->getType() == ProjectileType::CirBullet) ?
-                    it->getCircleShape().getGlobalBounds() :
-                    it->getCapsuleBounds())) {
+        if (npc.isAlive() && npc.getBounds().intersects((*it)->getBounds())) {
             npc.kill();
             it = projectiles.erase(it);
-            erased = true;
-                    }
-
-        if (!erased && it->isOffScreen(window)) {
+        }else if ((*it)->isOffScreen(window)) {
             it = projectiles.erase(it);
-            erased = true;
-        }
-
-        if (!erased)
+        }else {
             ++it;
+        }
     }
 
     // Check collision between NPC and player
@@ -99,7 +94,7 @@ void Game::render() {//to render
     if (playerAlive)
         window.draw(player.getShape());
     for (const auto& projectile : projectiles) {
-        projectile.draw(window);
+        projectile->draw(window);
     }
     npc.draw(window);
     window.display();
