@@ -5,20 +5,19 @@
 #include <iostream>
 #include <filesystem>
 
-#include "game.h"
-#include "player.h"
-#include "config.h"
-#include "first_projectile.h"s
-#include "second_projectile.h"
+#include "../include/game.h"
+#include "../include/player.h"
+#include "../include/config.h"
+#include "../include/first_projectile.h"
+#include "../include/second_projectile.h"
 
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
     player(sf::Color::Blue),
     npc({0.f, 0.f})
 {
-    std::filesystem::path exeDir = std::filesystem::current_path();  // gets working directory
-    std::filesystem::path fontPath = exeDir / "OpenSans-Regular.ttf";
-
+    std::filesystem::path exeDir = std::filesystem::current_path();
+    std::filesystem::path fontPath = exeDir.parent_path() / "text" / "OpenSans-Regular.ttf";
     if (!font.loadFromFile(fontPath.string())) {
         std::cerr << "Failed to load font from: " << fontPath << std::endl;
     }

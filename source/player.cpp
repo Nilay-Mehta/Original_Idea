@@ -1,6 +1,6 @@
-#include "player.h"
-#include "config.h"
-#include "game.h"
+#include "../include/player.h"
+#include "../include/config.h"
+#include "../include/game.h"
 
 Player::Player(const sf::Color& color)
     : velocity(0.0f, 0.0f)

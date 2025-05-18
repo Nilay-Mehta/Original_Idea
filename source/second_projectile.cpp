@@ -1,4 +1,4 @@
-#include "second_projectile.h"
+#include "../include/second_projectile.h"
 #include <cmath>
 
 CapBullet::CapBullet(const sf::Vector2f& startPos, const sf::Vector2f& direction) {

@@ -16,16 +16,16 @@ find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 
 # Add executable
 add_executable(${PROJECT_NAME}
-        main.cpp
-        game.cpp
-        player.cpp
-        npc.h
-        npc.cpp
-        base_projectile.h
-        first_projectile.h
-        first_projectile.cpp
-        second_projectile.h
-        second_projectile.cpp
+        source/main.cpp
+        source/game.cpp
+        source/player.cpp
+        include/npc.h
+        source/npc.cpp
+        include/base_projectile.h
+        include/first_projectile.h
+        source/first_projectile.cpp
+        include/second_projectile.h
+        source/second_projectile.cpp
 )
 
 # Link SFML libraries (SFML 2.x uses the old target names without sfml::)

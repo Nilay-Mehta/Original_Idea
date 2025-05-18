@@ -1,4 +1,4 @@
-#include "npc.h"
+#include "../include/npc.h"
 #include <cmath>
 
 NPC::NPC(const sf::Vector2f& position) {
