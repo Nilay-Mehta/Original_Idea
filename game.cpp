@@ -8,14 +8,27 @@
 #include "game.h"
 #include "player.h"
 #include "config.h"
-#include "first_projectile.h"
+#include "first_projectile.h"s
 #include "second_projectile.h"
 
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
     player(sf::Color::Blue),
     npc({0.f, 0.f})
-{}
+{
+    std::filesystem::path exeDir = std::filesystem::current_path();  // gets working directory
+    std::filesystem::path fontPath = exeDir / "OpenSans-Regular.ttf";
+
+    if (!font.loadFromFile(fontPath.string())) {
+        std::cerr << "Failed to load font from: " << fontPath << std::endl;
+    }
+
+    fpsText.setFont(font);
+    fpsText.setCharacterSize(18);
+    fpsText.setFillColor(sf::Color::Green);
+    fpsText.setPosition(10.f, 5.f);
+    fpsText.setString("FPS: ");
+}
 
 void Game::handleInput(const float deltaTime) { //user inputs for movement
     sf::Vector2f direction(0.0f, 0.0f);
@@ -52,19 +65,6 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
         toggle = !toggle;
         shootClock.restart();
     }
-
-    std::filesystem::path exeDir = std::filesystem::current_path();  // gets working directory
-    std::filesystem::path fontPath = exeDir / "OpenSans-Regular.ttf";
-
-    if (!font.loadFromFile(fontPath.string())) {
-        std::cerr << "Failed to load font from: " << fontPath << std::endl;
-    }
-
-    fpsText.setFont(font);
-    fpsText.setCharacterSize(18);
-    fpsText.setFillColor(sf::Color::Green);
-    fpsText.setPosition(10.f, 5.f);
-    fpsText.setString("FPS: ");
 }
 
 void Game::update(float deltaTime) {
