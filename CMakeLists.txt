@@ -14,6 +14,9 @@ set(SFML_DIR "./SFML-2.6.2/lib/cmake/SFML")
 # Find the SFML packages (components for SFML 2.x)
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 
+#find enet
+add_subdirectory(enet)
+
 # Add executable
 add_executable(${PROJECT_NAME}
         source/main.cpp
@@ -28,9 +31,15 @@ add_executable(${PROJECT_NAME}
         source/second_projectile.cpp
 )
 
-# Link SFML libraries (SFML 2.x uses the old target names without sfml::)
+#link enet and SFML
 target_link_libraries(${PROJECT_NAME}
         sfml-graphics
         sfml-window
         sfml-system
+        enet
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ./include
+        ${PROJECT_SOURCE_DIR}/enet/include
 )
