@@ -1,4 +1,4 @@
-#include "../include/first_projectile.h"
+#include "first_projectile.h"
 #include <cmath>
 
 CirBullet::CirBullet(const sf::Vector2f& startPos, const sf::Vector2f& direction) {

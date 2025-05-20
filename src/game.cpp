@@ -5,11 +5,11 @@
 #include <iostream>
 #include <filesystem>
 
-#include "../include/game.h"
-#include "../include/player.h"
-#include "../include/config.h"
-#include "../include/first_projectile.h"
-#include "../include/second_projectile.h"
+#include "game.h"
+#include "player.h"
+#include "config.h"
+#include "first_projectile.h"
+#include "second_projectile.h"
 
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),

@@ -14,24 +14,16 @@ set(SFML_DIR "./SFML-2.6.2/lib/cmake/SFML")
 # Find the SFML packages (components for SFML 2.x)
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 
-#find enet
+# Find enet
 add_subdirectory(enet)
 
-# Add executable
-add_executable(${PROJECT_NAME}
-        source/main.cpp
-        source/game.cpp
-        source/player.cpp
-        include/npc.h
-        source/npc.cpp
-        include/base_projectile.h
-        include/first_projectile.h
-        source/first_projectile.cpp
-        include/second_projectile.h
-        source/second_projectile.cpp
-)
+# Get all the source files
+file(GLOB SOURCES "src/*.cpp")
 
-#link enet and SFML
+# Add executable
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+# Link enet and SFML
 target_link_libraries(${PROJECT_NAME}
         sfml-graphics
         sfml-window
@@ -39,7 +31,8 @@ target_link_libraries(${PROJECT_NAME}
         enet
 )
 
+# Add include folders
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ./include
+        include
         ${PROJECT_SOURCE_DIR}/enet/include
 )
