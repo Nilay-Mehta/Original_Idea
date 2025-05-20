@@ -56,10 +56,12 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
 
         // Alternate between Circle and Capsule projectiles
         static bool toggle = false;
-        if (toggle)
-            projectiles.emplace_back(std::make_unique<CirBullet>(playerPos, direction));
-        else
-            projectiles.emplace_back(std::make_unique<CapBullet>(playerPos, direction));
+        if (playerAlive) {
+            if (toggle)
+                projectiles.emplace_back(std::make_unique<CirBullet>(playerPos, direction));
+            else
+                projectiles.emplace_back(std::make_unique<CapBullet>(playerPos, direction));
+        }
 
         toggle = !toggle;
         shootClock.restart();
