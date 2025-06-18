@@ -13,6 +13,7 @@ public:
     sf::Vector2f getPosition() const;
     bool isAlive() const;
     void kill();
+    void reset();
 
 private:
     sf::RectangleShape shape;

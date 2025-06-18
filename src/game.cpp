@@ -14,7 +14,8 @@
 Game::Game()
     :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
     player(sf::Color::Blue),
-    npc({0.f, 0.f})
+    npc({0.f, 0.f}),
+    currentGameState(GameState::Playing)
 {
     std::filesystem::path exeDir = std::filesystem::current_path();
     std::filesystem::path fontPath = exeDir.parent_path() / "text" / "OpenSans-Regular.ttf";
@@ -100,6 +101,7 @@ void Game::update(float deltaTime) {
     if (npc.isAlive() && playerAlive &&
         npc.getBounds().intersects(player.getShape().getGlobalBounds())) {
         playerAlive = false;
+        currentGameState = GameState::GameOver;
         projectiles.clear();
         }
 }
@@ -115,6 +117,18 @@ void Game::render() {//to render
     }
     npc.draw(window);
     window.draw(fpsText);
+    if (currentGameState == GameState::Paused) {
+        sf::Text pausedText("PAUSED", font, 69);
+        pausedText.setFillColor(sf::Color::Green);
+        pausedText.setPosition(300, 200);
+        window.draw(pausedText);
+    }
+    if (currentGameState == GameState::GameOver) {
+        sf::Text gameOverText("GAME OVER\nPress R to Respawn", font, 69);
+        gameOverText.setFillColor(sf::Color::Red);
+        gameOverText.setPosition(300, 200);
+        window.draw(gameOverText);
+    }
     window.display();
 }
 
@@ -137,6 +151,25 @@ void Game::game_loop() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Escape) {
+                    if (currentGameState == GameState::Playing)
+                        currentGameState = GameState::Paused;
+                    else if (currentGameState == GameState::Paused)
+                        currentGameState = GameState::Playing;
+                }
+                if (event.key.code == sf::Keyboard::R) {
+                    if (currentGameState == GameState::GameOver) {
+                        player.respawn();
+                        playerAlive = true;
+                        npc.reset();
+                        currentGameState = GameState::Playing;
+                    } else if (currentGameState == GameState::Paused) {
+                        npc.reset();
+                    }
+                }
+            }
         }
 
         // Calculate delta time as (time of current frame - time of prev frame)
@@ -148,8 +181,10 @@ void Game::game_loop() {
         if (deltaTime > Config::Timing::MAX_DELTA_TIME)
             deltaTime = Config::Timing::MAX_DELTA_TIME;
 
-        handleInput(deltaTime);
-        update(deltaTime);
+        if (currentGameState == GameState::Playing) {
+            handleInput(deltaTime);
+            update(deltaTime);
+        }
         render();
     }
 }

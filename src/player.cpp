@@ -56,3 +56,8 @@ void Player::borderCollision(const sf::RenderWindow &window) {
 
     shape.setPosition(pos);
 }
+
+void Player::respawn() {
+    setPosition(middleOfTheScreen());
+}
+

@@ -16,6 +16,7 @@ public:
     void setPosition(float x, float y);
     sf::Vector2f getPosition() const;
     void borderCollision(const sf::RenderWindow& window);
+    void respawn();
 
 private:
     sf::CircleShape shape;      // Circle shape for the player (could be changed later to something else)

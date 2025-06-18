@@ -39,3 +39,8 @@ bool NPC::isAlive() const {
 void NPC::kill() {
     alive = false;
 }
+
+void NPC::reset() {
+    alive = true;
+    shape.setPosition({400.f, 300.f});
+}

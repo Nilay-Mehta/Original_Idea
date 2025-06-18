@@ -11,6 +11,12 @@
 #include "npc.h"
 #include "base_projectile.h"
 
+enum class GameState {
+    Playing,
+    Paused,
+    GameOver
+};
+
 class Game {
 public:
     Game();
@@ -22,6 +28,7 @@ private:
     void render();
 
     sf::RenderWindow window;
+    GameState currentGameState;
     Player player;
     bool playerAlive = true;
     NPC npc;
