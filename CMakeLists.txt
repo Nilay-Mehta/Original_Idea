@@ -21,7 +21,10 @@ add_subdirectory(enet)
 file(GLOB SOURCES "src/*.cpp")
 
 # Add executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+        include/keybindings.h
+        src/keybindings.cpp
+)
 
 # Link enet and SFML
 target_link_libraries(${PROJECT_NAME}
