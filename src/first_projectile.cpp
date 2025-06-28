@@ -1,5 +1,6 @@
 #include "first_projectile.h"
 #include <cmath>
+#include <iostream>
 
 CirBullet::CirBullet(const sf::Vector2f& startPos, const sf::Vector2f& direction) {
     float len = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -27,8 +28,10 @@ int CirBullet::getDamage() const {
     return damage;
 }
 
-bool CirBullet::isOffScreen(const sf::RenderWindow& window) const {
+bool CirBullet::isOffScreen(const sf::RenderWindow& window, sf::Sprite &mapSprite) const {
     sf::FloatRect b = shape.getGlobalBounds();
-    auto size = window.getSize();
-    return (b.left + b.width < 0 || b.left > size.x || b.top + b.height < 0 || b.top > size.y);
+    // auto size = window.getSize();
+    auto size = mapSprite.getGlobalBounds();
+    std::cout << size.width << " " << size.height << std::endl;
+    return (b.left + b.width < 0 || b.left > size.width || b.top + b.height < 0 || b.top > size.height);
 }

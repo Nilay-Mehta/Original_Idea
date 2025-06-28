@@ -10,7 +10,7 @@ public:
 
     sf::FloatRect getBounds() const override;
     int getDamage() const override;
-    bool isOffScreen(const sf::RenderWindow& window) const override;
+    bool isOffScreen(const sf::RenderWindow& window, sf::Sprite &mapSprite) const override;
 
 private:
     sf::RectangleShape body;

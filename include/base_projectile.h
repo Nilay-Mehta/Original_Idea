@@ -11,5 +11,5 @@ public:
 
     virtual sf::FloatRect getBounds() const = 0;
     virtual int getDamage() const = 0;
-    virtual bool isOffScreen(const sf::RenderWindow& window) const = 0;
+    virtual bool isOffScreen(const sf::RenderWindow& window, sf::Sprite &mapSprite) const = 0;
 };

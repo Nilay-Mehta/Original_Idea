@@ -40,18 +40,28 @@ sf::Vector2f Player::getPosition() const {
     return shape.getPosition();
 }
 
-void Player::borderCollision(const sf::RenderWindow &window) {
+void Player::borderCollision(const sf::RenderWindow &window, sf::Sprite &mapSprite) {
     sf::Vector2f pos = shape.getPosition();
-
+    sf::Vector2f bounds = mapSprite.getGlobalBounds().getSize();
+    // pos.x = std::clamp(
+    //     pos.x,
+    //     Config::Player::RADIUS,
+    //     static_cast<float>(window.getSize().x) - Config::Player::RADIUS
+    // );
+    // pos.y = std::clamp(
+    //     pos.y,
+    //     Config::Player::RADIUS,
+    //     static_cast<float>(window.getSize().y) - Config::Player::RADIUS
+    // );
     pos.x = std::clamp(
         pos.x,
         Config::Player::RADIUS,
-        static_cast<float>(window.getSize().x) - Config::Player::RADIUS
+        bounds.x - Config::Player::RADIUS
     );
     pos.y = std::clamp(
         pos.y,
         Config::Player::RADIUS,
-        static_cast<float>(window.getSize().y) - Config::Player::RADIUS
+        bounds.y - Config::Player::RADIUS
     );
 
     shape.setPosition(pos);

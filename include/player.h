@@ -15,7 +15,7 @@ public:
     void setPosition(const sf::Vector2f& _position);
     void setPosition(float x, float y);
     sf::Vector2f getPosition() const;
-    void borderCollision(const sf::RenderWindow& window);
+    void borderCollision(const sf::RenderWindow& window, sf::Sprite &mapSprite);
     void respawn();
 
 private:

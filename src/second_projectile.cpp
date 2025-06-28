@@ -49,8 +49,9 @@ int CapBullet::getDamage() const {
     return damage;
 }
 
-bool CapBullet::isOffScreen(const sf::RenderWindow& window) const {
+bool CapBullet::isOffScreen(const sf::RenderWindow& window, sf::Sprite &mapSprite) const {
     sf::FloatRect b = getBounds();
-    auto size = window.getSize();
-    return (b.left + b.width < 0 || b.left > size.x || b.top + b.height < 0 || b.top > size.y);
+    // auto size = window.getSize();
+    auto size = mapSprite.getGlobalBounds();
+    return (b.left + b.width < 0 || b.left > size.width || b.top + b.height < 0 || b.top > size.height);
 }

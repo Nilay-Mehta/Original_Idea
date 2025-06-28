@@ -16,7 +16,7 @@ Game::Game()
     player(sf::Color::Blue),
     npc({0.f, 0.f}),
     currentGameState(GameState::Playing)
-{
+    {
     std::filesystem::path exeDir = std::filesystem::current_path();
     std::filesystem::path fontPath = exeDir.parent_path() / "text" / "OpenSans-Regular.ttf";
     if (!font.loadFromFile(fontPath.string())) {
@@ -28,6 +28,14 @@ Game::Game()
     fpsText.setFillColor(sf::Color::Green);
     fpsText.setPosition(10.f, 5.f);
     fpsText.setString("FPS: ");
+
+    // Background
+    mapTexture.loadFromFile("assets\\background.jpg");
+    mapSprite.setTexture(mapTexture);
+
+    // Creating the view (camera)
+    view.setSize(window.getSize().x, window.getSize().y);
+    view.setCenter(player.getPosition().x, player.getPosition().y);
 }
 
 void Game::handleInput(const float deltaTime) { //user inputs for movement
@@ -75,7 +83,7 @@ void Game::update(float deltaTime) {
 
     if (!playerAlive) return;
 
-    player.borderCollision(window);
+    player.borderCollision(window, mapSprite);
 
     // Always update all projectiles movement
     for (auto& p : projectiles) {
@@ -90,7 +98,7 @@ void Game::update(float deltaTime) {
         if (npc.isAlive() && npc.getBounds().intersects((*it)->getBounds())) {
             npc.kill();
             it = projectiles.erase(it);
-        }else if ((*it)->isOffScreen(window)) {
+        }else if ((*it)->isOffScreen(window, mapSprite)) {
             it = projectiles.erase(it);
         }else {
             ++it;
@@ -108,7 +116,20 @@ void Game::update(float deltaTime) {
 
 
 void Game::render() {//to render
-    window.clear(sf::Color::Black);
+    sf::Vector2f center = player.getPosition();
+    sf::Vector2f halfSize = view.getSize() / 2.f;
+
+    float leftBound = halfSize.x;
+    float rightBound = mapSprite.getGlobalBounds().width - halfSize.x;
+    float topBound = halfSize.y;
+    float bottomBound = mapSprite.getGlobalBounds().height - halfSize.y;
+
+    center.x = std::clamp(center.x, leftBound, rightBound);
+    center.y = std::clamp(center.y, topBound, bottomBound);
+
+    view.setCenter(center);
+    window.setView(view);
+    window.draw(mapSprite);
 
     if (playerAlive)
         window.draw(player.getShape());
@@ -116,17 +137,18 @@ void Game::render() {//to render
         projectile->draw(window);
     }
     npc.draw(window);
+    fpsText.setPosition(center - sf::Vector2f(view.getSize().x / 2, view.getSize().y / 2) );
     window.draw(fpsText);
     if (currentGameState == GameState::Paused) {
         sf::Text pausedText("PAUSED", font, 69);
         pausedText.setFillColor(sf::Color::Green);
-        pausedText.setPosition(300, 200);
+        pausedText.setPosition(center.x - 500, center.y - 300);
         window.draw(pausedText);
     }
     if (currentGameState == GameState::GameOver) {
         sf::Text gameOverText("GAME OVER\nPress R to Respawn", font, 69);
         gameOverText.setFillColor(sf::Color::Red);
-        gameOverText.setPosition(300, 200);
+        gameOverText.setPosition(center.x - 500, center.y - 300);
         window.draw(gameOverText);
     }
     window.display();

@@ -36,4 +36,7 @@ private:
     sf::Clock shootClock;
     sf::Font font;
     sf::Text fpsText;
+    sf::Texture mapTexture;
+    sf::Sprite mapSprite;
+    sf::View view;
 };
