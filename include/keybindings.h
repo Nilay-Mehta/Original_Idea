@@ -21,17 +21,18 @@ namespace input {
     };
 
     struct InputBinding {
-        InputType type;
-        union {
-            sf::Keyboard::Key key;
-            sf::Mouse::Button button;
-        };
+        sf::Keyboard::Key key;
+        sf::Mouse::Button button;
+        InputType type;  // ✅ This is what your cpp file expects
+
+        InputBinding() :
+            key(sf::Keyboard::Unknown), button(sf::Mouse::ButtonCount), type(InputType::Keyboard) {}
 
         InputBinding(sf::Keyboard::Key k) :
-        type(InputType::Keyboard), key(k) {}
+            key(k), button(sf::Mouse::ButtonCount), type(InputType::Keyboard) {}
 
         InputBinding(sf::Mouse::Button b) :
-        type(InputType::Mouse), button(b) {}
+            key(sf::Keyboard::Unknown), button(b), type(InputType::Mouse) {}
     };
 
     class KeyBindings {
