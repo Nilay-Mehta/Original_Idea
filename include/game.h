@@ -24,7 +24,7 @@ public:
 
 private:
     void handleInput(float deltaTime);
-    void update(float deltaTime);
+    void update(float deltaTime, bool updateFPS);
     void render();
 
     sf::RenderWindow window;
@@ -39,4 +39,5 @@ private:
     sf::Texture mapTexture;
     sf::Sprite mapSprite;
     sf::View view;
+    sf::Clock FPSDelayClock;
 };

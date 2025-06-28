@@ -36,6 +36,8 @@ Game::Game()
     // Creating the view (camera)
     view.setSize(window.getSize().x, window.getSize().y);
     view.setCenter(player.getPosition().x, player.getPosition().y);
+
+    FPSDelayClock.restart();
 }
 
 void Game::handleInput(const float deltaTime) { //user inputs for movement
@@ -77,9 +79,11 @@ void Game::handleInput(const float deltaTime) { //user inputs for movement
     }
 }
 
-void Game::update(float deltaTime) {
-    float fps = 1.f / deltaTime;
-    fpsText.setString("FPS: " + std::to_string(static_cast<int>(fps)));
+void Game::update(float deltaTime, bool updateFPS) {
+    if (updateFPS) {
+        float fps = 1.f / deltaTime;
+        fpsText.setString("FPS: " + std::to_string(static_cast<int>(fps)));
+    }
 
     if (!playerAlive) return;
 
@@ -165,6 +169,7 @@ void Game::game_loop() {
 
     sf::Clock clock;
     sf::Time lastTime = clock.getElapsedTime();
+    bool updateFPS;
 
     // Run the program as long as the window is open
     while (window.isOpen()) {
@@ -203,10 +208,18 @@ void Game::game_loop() {
         if (deltaTime > Config::Timing::MAX_DELTA_TIME)
             deltaTime = Config::Timing::MAX_DELTA_TIME;
 
+        if (FPSDelayClock.getElapsedTime().asMilliseconds() > 500) {
+            FPSDelayClock.restart();
+            updateFPS = true;
+        } else {
+            updateFPS = false;
+        }
+
         if (currentGameState == GameState::Playing) {
             handleInput(deltaTime);
-            update(deltaTime);
+            update(deltaTime, updateFPS);
         }
+
         render();
     }
 }

@@ -32,6 +32,5 @@ bool CirBullet::isOffScreen(const sf::RenderWindow& window, sf::Sprite &mapSprit
     sf::FloatRect b = shape.getGlobalBounds();
     // auto size = window.getSize();
     auto size = mapSprite.getGlobalBounds();
-    std::cout << size.width << " " << size.height << std::endl;
     return (b.left + b.width < 0 || b.left > size.width || b.top + b.height < 0 || b.top > size.height);
 }
