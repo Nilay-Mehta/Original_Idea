@@ -23,7 +23,7 @@ namespace input {
     struct InputBinding {
         sf::Keyboard::Key key;
         sf::Mouse::Button button;
-        InputType type;  // ✅ This is what your cpp file expects
+        InputType type;
 
         InputBinding() :
             key(sf::Keyboard::Unknown), button(sf::Mouse::ButtonCount), type(InputType::Keyboard) {}
