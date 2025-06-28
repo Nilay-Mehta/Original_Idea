@@ -30,7 +30,7 @@ Game::Game()
     fpsText.setString("FPS: ");
 
     // Background
-    mapTexture.loadFromFile("assets\\background.jpg");
+    mapTexture.loadFromFile("..\\assets\\background.jpg");
     mapSprite.setTexture(mapTexture);
 
     // Creating the view (camera)
