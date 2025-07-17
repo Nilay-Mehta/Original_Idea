@@ -21,7 +21,9 @@ add_subdirectory(enet)
 file(GLOB SOURCES "src/*.cpp")
 
 # Add executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+        include/resource_manager.h
+        src/resource_manager.cpp)
 
 # Link enet and SFML
 target_link_libraries(${PROJECT_NAME}
@@ -36,3 +38,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         include
         ${PROJECT_SOURCE_DIR}/enet/include
 )
+
+# Copy the assets folder to the build directory
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

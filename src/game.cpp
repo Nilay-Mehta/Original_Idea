@@ -5,6 +5,7 @@
 #include <iostream>
 #include <filesystem>
 
+#include "resource_manager.h"
 #include "game.h"
 #include "player.h"
 #include "config.h"
@@ -12,26 +13,28 @@
 #include "second_projectile.h"
 
 Game::Game()
-    :window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
-    player(sf::Color::Blue),
-    npc({0.f, 0.f}),
-    currentGameState(GameState::Playing)
-    {
-    std::filesystem::path exeDir = std::filesystem::current_path();
-    std::filesystem::path fontPath = exeDir.parent_path() / "text" / "OpenSans-Regular.ttf";
-    if (!font.loadFromFile(fontPath.string())) {
-        std::cerr << "Failed to load font from: " << fontPath << std::endl;
+    : window(sf::VideoMode(Config::Display::SCREEN_WIDTH, Config::Display::SCREEN_HEIGHT), "SFML TEST", sf::Style::Default),
+      player(sf::Color::Blue),
+      npc({0.f, 0.f}),
+      currentGameState(GameState::Playing)
+{
+    try {
+        // Load font using ResourceManager
+        font = ResourceManager::getFont("assets/texts/OpenSans-Regular.ttf");
+        fpsText.setFont(font);
+        fpsText.setCharacterSize(18);
+        fpsText.setFillColor(sf::Color::Green);
+        fpsText.setPosition(10.f, 5.f);
+        fpsText.setString("FPS: ");
+
+        // Load background texture using ResourceManager
+        mapTexture = ResourceManager::getTexture("assets/textures/background.jpg");
+        mapSprite.setTexture(mapTexture);
+    } catch (const std::exception& e) {
+        std::cerr << "Asset loading error: " << e.what() << std::endl;
+        window.close();  // optional: prevent game loop from starting
+        throw;           // propagate to main()
     }
-
-    fpsText.setFont(font);
-    fpsText.setCharacterSize(18);
-    fpsText.setFillColor(sf::Color::Green);
-    fpsText.setPosition(10.f, 5.f);
-    fpsText.setString("FPS: ");
-
-    // Background
-    mapTexture.loadFromFile("..\\assets\\background.jpg");
-    mapSprite.setTexture(mapTexture);
 
     // Creating the view (camera)
     view.setSize(window.getSize().x, window.getSize().y);
